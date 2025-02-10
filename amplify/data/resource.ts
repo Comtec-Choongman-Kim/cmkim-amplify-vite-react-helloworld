@@ -15,8 +15,14 @@ const schema = a.schema({
     .authorization((allow) => [allow.publicApiKey()]),
   Company: a
     .model({
-      id: a.id(),
       name: a.string(),
+      description: a.string(),
+    })
+    .authorization((allow) => [allow.publicApiKey()]),
+  Account: a
+    .model({
+      account_name: a.string(),
+      account_id: a.string(),
       description: a.string(),
     })
     .authorization((allow) => [allow.publicApiKey()]),
