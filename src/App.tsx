@@ -6,6 +6,8 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 import { TodoCreateForm, TodoDeleteForm } from "../ui-components";
 import { CompanyCreateForm } from "../ui-components";
 
+import AppTopNavigation from "./components/AppTopNavigation"
+
 const client = generateClient<Schema>();
 
 function App() {
@@ -51,48 +53,59 @@ function App() {
   }
 
   return (
-    <main>
-      <h1>My todos</h1>
-      {/* <button onClick={createTodo}>+ new</button> */}
-      {/* 모달 열기 버튼 */}
-      <button onClick={() => setShowTodoModal(true)}>+ new Todo</button>
-
-      {/* 모달이 열려 있을 때만 표시 */}
-      {showTodoModal && (
-        <div className="modal">
-          <TodoCreateForm />
-          <button onClick={() => setShowTodoModal(false)}>닫기</button>
+    <>
+      {/* 네비게이션 바 */}
+      <header style={{ margin: 0, padding: 0 }}>
+        <AppTopNavigation />
+      </header>
+  
+      <main>
+        <h1>My todos</h1>
+  
+        <button onClick={() => setShowTodoModal(true)}>+ new Todo</button>
+  
+        {showTodoModal && (
+          <div className="modal">
+            <TodoCreateForm />
+            <button onClick={() => setShowTodoModal(false)}>닫기</button>
+          </div>
+        )}
+  
+        <ul>
+          {todos.map((todo) => (
+            <li onClick={() => deleteTodo(todo.id)} key={todo.id}>
+              {todo.content}
+            </li>
+          ))}
+        </ul>
+  
+        <button onClick={() => setShowCompanyModal(true)}>+ new Company</button>
+  
+        {showCompanyModal && (
+          <div className="modal">
+            <CompanyCreateForm />
+            <button onClick={() => setShowCompanyModal(false)}>닫기</button>
+          </div>
+        )}
+  
+        <h1>Companies</h1>
+        <ul>
+          {companies.map((company) => (
+            <li key={company.id}>{company.name}</li>
+          ))}
+        </ul>
+  
+        <div>
+          🥳 App successfully hosted.
+          <br />
+          <a href="https://docs.amplify.aws/react/start/quickstart/#make-frontend-updates">
+            Review next step of this tutorial.
+          </a>
         </div>
-      )}
-      <ul>
-        {todos.map((todo) => (
-          <li onClick={() => deleteTodo(todo.id)} key={todo.id}>{todo.content}</li>
-        ))}
-      </ul>
-      {/* 모달 열기 버튼 */}
-      <button onClick={() => setShowCompanyModal(true)}>+ new Company</button>
-      {/* 모달이 열려 있을 때만 표시 */}
-      {showCompanyModal && (
-        <div className="modal">
-          <CompanyCreateForm />
-          <button onClick={() => setShowCompanyModal(false)}>닫기</button>
-        </div>
-      )}
-      <h1>Companies</h1>
-      <ul>
-        {companies.map((company) => (
-          <li key={company.id}>{company.name}</li>
-        ))}
-      </ul>
-      <div>
-        🥳 App successfully hosted. Try creating a new todo.
-        <br />
-        <a href="https://docs.amplify.aws/react/start/quickstart/#make-frontend-updates">
-          Review next step of this tutorial.
-        </a>
-      </div>
-      <button onClick={signOut}>Sign out</button>
-    </main>
+  
+        <button onClick={signOut}>Sign out</button>
+      </main>
+    </>
   );
 }
 
